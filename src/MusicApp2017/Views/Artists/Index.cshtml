@@ -1,0 +1,10 @@
+﻿<h2>Artists</h2>
+
+ 
+<ul class="list-unstyled">
+    @foreach (var item in Model)
+    {
+        <li><a asp-action="Details" asp-controller="Artists" asp-route-id="@item.ArtistID"> @item.Name </a></li>
+    }
+</ul>
+<a asp-action="Create" asp-controller="Artists" class="btn btn-md btn-info">Create new Artist</a>

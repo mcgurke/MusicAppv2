@@ -1,0 +1,23 @@
+﻿<h3>@ViewData["Name"] Albums</h3>
+
+
+@if (Model != null)
+{
+    
+        <ul class="list-unstyled">
+            @foreach (var item in Model)
+            {
+                if (item.ArtistID == (int)ViewData["ID"])
+                {
+
+                    <li><a asp-action="Details" asp-controller="Albums" asp-route-id="@item.AlbumID">@item.Title</a></li>
+
+                }
+            }
+        </ul>
+    
+    <h3>@ViewData["Name"] Bio</h3>
+    <p>@ViewData["Bio"]</p>
+    <a asp-action="Edit" asp-route-id='@ViewData["ID"]' class="btn btn-md btn-info">Edit Artist Name or Bio</a>
+}
+

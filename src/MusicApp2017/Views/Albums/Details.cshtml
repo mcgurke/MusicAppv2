@@ -1,0 +1,41 @@
+@model MusicApp2017.Models.Album
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h3>Album Details</h3>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Model.Title
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Artist)
+        </dt>
+        <dd>
+            @Model.Artist.Name
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd>
+            @Model.Genre.Name
+        </dd>
+    </dl>
+</div>
+@if (Model.Artist.Bio != null) {
+    <div>
+        <h4>@Model.Artist.Name Bio</h4>
+        <p>@Model.Artist.Bio</p>
+    </div>
+}
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.AlbumID">Edit Album</a> |
+    <a asp-action="Index">Back to Album List</a>
+</div>

@@ -1,0 +1,27 @@
+﻿<h2>@ViewData["GenreName"] Albums</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Album Title</th>
+            <th>Artist</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                if (item.GenreID == (int)ViewData["GenreID"])
+                {
+                    <tr>
+                        <td><a asp-action="Details" asp-controller="Albums" asp-route-id="@item.AlbumID">@item.Title</a></td>
+                        <td><a asp-action="Details" asp-controller="Artists" asp-route-id="@item.ArtistID">@item.Artist.Name</a></td>
+                    </tr>
+
+                }
+            }
+        }
+    </tbody>
+</table>
+<a asp-action="Edit" asp-route-id='@ViewData["GenreID"]' class="btn btn-md btn-info">Edit Genre Name</a>

@@ -1,0 +1,9 @@
+﻿<h2>Genres</h2>
+
+
+<ul class="list-unstyled">
+    @foreach (var item in Model) {
+        <li><a asp-action="Details" asp-controller="Genres" asp-route-id="@item.GenreID"> @item.Name </a> </li>
+    }
+</ul>
+<a asp-action="Create" asp-controller="Genres" class="btn btn-md btn-info">Create new Genre</a> 

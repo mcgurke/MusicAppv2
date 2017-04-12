@@ -1,0 +1,11 @@
+﻿@model MusicApp2017.Models.Genre
+<h2>Add New Genre</h2>
+<form asp-action="Create">
+    <label asp-for="Name" ></label>
+    <input asp-for="Name" /> <br />
+    <span asp-validation-for="Name" class="text-danger"></span>
+    <span class="alert-danger">@ViewData["Error"]</span> <br />
+    <input type="submit" value="Create" class="btn btn-default" />
+</form>
+
+<a asp-action="Index">Return to Genre List</a>
