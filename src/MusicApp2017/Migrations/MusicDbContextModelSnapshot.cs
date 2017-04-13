@@ -159,7 +159,7 @@ namespace MusicApp2017.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int?>("FavoriteGenreGenreID");
+                    b.Property<int>("GenreID");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -186,7 +186,7 @@ namespace MusicApp2017.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FavoriteGenreGenreID");
+                    b.HasIndex("GenreID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -279,9 +279,10 @@ namespace MusicApp2017.Migrations
 
             modelBuilder.Entity("MusicApp2017.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("MusicApp2017.Models.Genre", "FavoriteGenre")
+                    b.HasOne("MusicApp2017.Models.Genre", "Genre")
                         .WithMany()
-                        .HasForeignKey("FavoriteGenreGenreID");
+                        .HasForeignKey("GenreID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }
