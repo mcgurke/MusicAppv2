@@ -44,18 +44,22 @@ namespace MusicApp2017.Controllers
 
         public async Task<IActionResult> FavoriteGenre()
         {
-            if (this.User != null)
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser != null)
             {
-                var userName = this.User.Identity.Name;
-                var user = _userManager.Users.SingleOrDefault(a => a.Email == userName);
-                if (user.GenreID != null)
+                if (currentUser.GenreID != null)
                 {
-                    var musicDbContext = _context.Albums.Include(a => a.Artist).Include(a => a.Genre).Where(a => a.GenreID == user.GenreID);
-                    ViewData["Genre"] = _context.Genres.SingleOrDefault(a => a.GenreID == user.GenreID).Name;
-                    return View(await musicDbContext.ToListAsync());
+                    var musicDbContext = _context.Albums.Include(a => a.Artist).Include(a => a.Genre).Where(a => a.GenreID == currentUser.GenreID);
+                    ViewData["Genre"] = _context.Genres.SingleOrDefault(a => a.GenreID == currentUser.GenreID).Name;
+                    if (musicDbContext.ToList().Count > 0)
+                    {
+                        return View(await musicDbContext.ToListAsync());
+                    }
+                    return RedirectToAction("AlbumsList");
                 }
+                return RedirectToAction("AlbumsList");
             }
-            return NotFound();
+            return NotFound(currentUser);
         }
 
         // GET: Albums/Details/5
@@ -93,7 +97,7 @@ namespace MusicApp2017.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlbumID,Title,ArtistID,GenreID,Likes")] Album album)
+        public async Task<IActionResult> Create([Bind("AlbumID,Title,ArtistID,GenreID,")] Album album)
         { 
             if (ModelState.IsValid)
             {
@@ -129,7 +133,7 @@ namespace MusicApp2017.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AlbumID,Title,ArtistID,GenreID,Likes")] Album album)
+        public async Task<IActionResult> Edit(int id, [Bind("AlbumID,Title,ArtistID,GenreID")] Album album)
         {
             if (id != album.AlbumID)
             {

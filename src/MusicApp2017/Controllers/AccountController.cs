@@ -81,18 +81,17 @@ namespace MusicApp2017.Controllers
 
         public async Task<IActionResult> Edit()
         {
-            if (this.User != null)
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser != null)
             {
-                var userName = this.User.Identity.Name;
-                var user = _userManager.Users.SingleOrDefault(a => a.Email == userName);
-                if (user.GenreID != null)
+                if (currentUser.GenreID != null)
                 {
-                    ViewData["Genre"] = _context.Genres.SingleOrDefault(a => a.GenreID == user.GenreID).Name;
-                    ViewData["GenreID"] = new SelectList(_context.Genres, "GenreID", "Name");
-                    return View(user);
+                    ViewData["Genre"] = _context.Genres.SingleOrDefault(a => a.GenreID == currentUser.GenreID).Name;
                 }
+                ViewData["GenreID"] = new SelectList(_context.Genres, "GenreID", "Name");
+                return View(currentUser);
             }
-            return NotFound();
+            return NotFound(currentUser);
         }
 
         [HttpPost]
@@ -143,6 +142,7 @@ namespace MusicApp2017.Controllers
             }
 
             // If we got this far, something failed, redisplay form
+            ViewData["GenreID"] = new SelectList(_context.Genres, "GenreID", "Name");
             return View(model);
         }
 
