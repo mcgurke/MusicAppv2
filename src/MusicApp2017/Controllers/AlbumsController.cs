@@ -27,6 +27,23 @@ namespace MusicApp2017.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
+            if(User.Identity.IsAuthenticated)
+            //if (this.User != null)
+            {
+                return RedirectToAction("FavoriteGenre");
+            }
+            return RedirectToAction("AlbumsList");
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> AlbumsList()
+        {
+            var musicDbContext = _context.Albums.Include(a => a.Artist).Include(a => a.Genre);
+            return View(await musicDbContext.ToListAsync());
+        }
+
+        public async Task<IActionResult> FavoriteGenre()
+        {
             if (this.User != null)
             {
                 var userName = this.User.Identity.Name;
@@ -34,13 +51,9 @@ namespace MusicApp2017.Controllers
                 if (user.GenreID != null)
                 {
                     var musicDbContext = _context.Albums.Include(a => a.Artist).Include(a => a.Genre).Where(a => a.GenreID == user.GenreID);
+                    ViewData["Genre"] = _context.Genres.SingleOrDefault(a => a.GenreID == user.GenreID).Name;
                     return View(await musicDbContext.ToListAsync());
                 }
-            }
-            else
-            {
-                var musicDbContext = _context.Albums.Include(a => a.Artist).Include(a => a.Genre);
-                return View(await musicDbContext.ToListAsync());
             }
             return NotFound();
         }

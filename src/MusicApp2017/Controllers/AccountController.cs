@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 using MusicApp2017.Models;
 using MusicApp2017.Models.AccountViewModels;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace MusicApp2017.Controllers
 {
@@ -75,6 +77,31 @@ namespace MusicApp2017.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        public async Task<IActionResult> Edit()
+        {
+            if (this.User != null)
+            {
+                var userName = this.User.Identity.Name;
+                var user = _userManager.Users.SingleOrDefault(a => a.Email == userName);
+                if (user.GenreID != null)
+                {
+                    ViewData["Genre"] = _context.Genres.SingleOrDefault(a => a.GenreID == user.GenreID).Name;
+                    ViewData["GenreID"] = new SelectList(_context.Genres, "GenreID", "Name");
+                    return View(user);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int GenreID)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            currentUser.GenreID = GenreID;
+            var succeeded = await _userManager.UpdateAsync(currentUser);
+            return RedirectToAction("Index", "Albums");
         }
 
         //
