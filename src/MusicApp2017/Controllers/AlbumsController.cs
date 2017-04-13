@@ -28,7 +28,6 @@ namespace MusicApp2017.Controllers
         public async Task<IActionResult> Index()
         {
             if(User.Identity.IsAuthenticated)
-            //if (this.User != null)
             {
                 return RedirectToAction("FavoriteGenre");
             }
