@@ -10,7 +10,7 @@ namespace MusicApp2017.Models
     public class ApplicationUser : IdentityUser
     {
         [Display(Name = "Favorite Genre")]
-        public int GenreID { get; set; }
+        public int? GenreID { get; set; }
         public Genre Genre { get; set; }
     }
 

@@ -8,8 +8,8 @@ using MusicApp2017.Models;
 namespace MusicApp2017.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20170406155355_identity")]
-    partial class identity
+    [Migration("20170413180145_favgenre")]
+    partial class favgenre
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -160,6 +160,8 @@ namespace MusicApp2017.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<int?>("GenreID");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -184,6 +186,8 @@ namespace MusicApp2017.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GenreID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -272,6 +276,13 @@ namespace MusicApp2017.Migrations
                         .WithMany()
                         .HasForeignKey("GenreID")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MusicApp2017.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("MusicApp2017.Models.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreID");
                 });
         }
     }

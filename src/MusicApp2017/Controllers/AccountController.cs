@@ -58,6 +58,7 @@ namespace MusicApp2017.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    //return NotFound(_userManager.Users);
                     return RedirectToLocal(returnUrl);
                 }
                 
@@ -94,7 +95,7 @@ namespace MusicApp2017.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
-            return NotFound(model);
+            //return NotFound(model);
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {

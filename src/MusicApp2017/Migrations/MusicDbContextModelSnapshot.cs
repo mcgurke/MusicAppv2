@@ -159,7 +159,7 @@ namespace MusicApp2017.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("GenreID");
+                    b.Property<int?>("GenreID");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -281,8 +281,7 @@ namespace MusicApp2017.Migrations
                 {
                     b.HasOne("MusicApp2017.Models.Genre", "Genre")
                         .WithMany()
-                        .HasForeignKey("GenreID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("GenreID");
                 });
         }
     }
