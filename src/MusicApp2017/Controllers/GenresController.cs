@@ -62,6 +62,7 @@ namespace MusicApp2017.Controllers
             return View(genre);
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -77,6 +78,7 @@ namespace MusicApp2017.Controllers
             return View(genre);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public IActionResult Edit(int id, [Bind("GenreID, Name")] Genre genre)
         {
