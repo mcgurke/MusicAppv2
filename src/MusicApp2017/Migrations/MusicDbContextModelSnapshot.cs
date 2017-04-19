@@ -144,6 +144,26 @@ namespace MusicApp2017.Migrations
                     b.ToTable("Albums");
                 });
 
+            modelBuilder.Entity("MusicApp2017.Models.AlbumRating", b =>
+                {
+                    b.Property<int>("AlbumRatingID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AlbumID");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("AlbumRatingID");
+
+                    b.HasIndex("AlbumID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("AlbumRatings");
+                });
+
             modelBuilder.Entity("MusicApp2017.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -275,6 +295,18 @@ namespace MusicApp2017.Migrations
                         .WithMany()
                         .HasForeignKey("GenreID")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MusicApp2017.Models.AlbumRating", b =>
+                {
+                    b.HasOne("MusicApp2017.Models.Album", "Album")
+                        .WithMany()
+                        .HasForeignKey("AlbumID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MusicApp2017.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("MusicApp2017.Models.ApplicationUser", b =>

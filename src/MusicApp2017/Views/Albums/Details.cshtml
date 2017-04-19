@@ -27,6 +27,12 @@
         <dd>
             @Model.Genre.Name
         </dd>
+        <dt>
+            Rating
+        </dt>
+        <dd>
+            @ViewData["Rating"]
+        </dd>
     </dl>
 </div>
 @if (Model.Artist.Bio != null) {
@@ -36,6 +42,7 @@
     </div>
 }
 <div>
+    <a asp-action="Rate" asp-route-id="@Model.AlbumID">Rate Album</a> |
     <a asp-action="Edit" asp-route-id="@Model.AlbumID">Edit Album</a> |
     <a asp-action="Index">Back to Album List</a>
 </div>

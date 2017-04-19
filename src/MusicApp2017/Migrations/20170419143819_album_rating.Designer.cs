@@ -8,8 +8,8 @@ using MusicApp2017.Models;
 namespace MusicApp2017.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20170413180145_favgenre")]
-    partial class favgenre
+    [Migration("20170419143819_album_rating")]
+    partial class album_rating
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -145,6 +145,26 @@ namespace MusicApp2017.Migrations
                     b.ToTable("Albums");
                 });
 
+            modelBuilder.Entity("MusicApp2017.Models.AlbumRating", b =>
+                {
+                    b.Property<int>("AlbumRatingID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AlbumID");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("AlbumRatingID");
+
+                    b.HasIndex("AlbumID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("AlbumRatings");
+                });
+
             modelBuilder.Entity("MusicApp2017.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -276,6 +296,18 @@ namespace MusicApp2017.Migrations
                         .WithMany()
                         .HasForeignKey("GenreID")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MusicApp2017.Models.AlbumRating", b =>
+                {
+                    b.HasOne("MusicApp2017.Models.Album", "Album")
+                        .WithMany()
+                        .HasForeignKey("AlbumID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MusicApp2017.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("MusicApp2017.Models.ApplicationUser", b =>

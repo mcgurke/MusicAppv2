@@ -1,0 +1,18 @@
+﻿@model MusicApp2017.Models.AlbumRating
+
+<h3>Rate @ViewData["Title"]</h3>
+
+<form asp-action="Rate">
+    <label asp-for="Rating"></label>
+    <select asp-for="Rating" class="form-control">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    
+    <input type="submit" value="Save" class="btn btn-default" />
+    
+</form>
+<a asp-action="Details" asp-route-id=@ViewData["AlbumID"] >Back to Album Details</a>

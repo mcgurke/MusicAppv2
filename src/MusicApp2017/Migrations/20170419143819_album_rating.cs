@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MusicApp2017.Migrations
 {
-    public partial class init : Migration
+    public partial class album_rating : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -121,7 +121,7 @@ namespace MusicApp2017.Migrations
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    GenreID = table.Column<int>(nullable: false),
+                    GenreID = table.Column<int>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
@@ -141,7 +141,7 @@ namespace MusicApp2017.Migrations
                         column: x => x.GenreID,
                         principalTable: "Genres",
                         principalColumn: "GenreID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,6 +209,33 @@ namespace MusicApp2017.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AlbumRatings",
+                columns: table => new
+                {
+                    AlbumRatingID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AlbumID = table.Column<int>(nullable: false),
+                    Rating = table.Column<int>(nullable: false),
+                    UserID = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AlbumRatings", x => x.AlbumRatingID);
+                    table.ForeignKey(
+                        name: "FK_AlbumRatings_Albums_AlbumID",
+                        column: x => x.AlbumID,
+                        principalTable: "Albums",
+                        principalColumn: "AlbumID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AlbumRatings_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
@@ -246,6 +273,16 @@ namespace MusicApp2017.Migrations
                 column: "GenreID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AlbumRatings_AlbumID",
+                table: "AlbumRatings",
+                column: "AlbumID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlbumRatings_UserID",
+                table: "AlbumRatings",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_GenreID",
                 table: "AspNetUsers",
                 column: "GenreID");
@@ -280,10 +317,13 @@ namespace MusicApp2017.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Albums");
+                name: "AlbumRatings");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Albums");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

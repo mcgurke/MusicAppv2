@@ -70,17 +70,73 @@ namespace MusicApp2017.Controllers
                 return NotFound();
             }
 
-            var albumContext =  _context.Albums
+            var albumContext = _context.Albums
                 .Include(a => a.Artist)
                 .Include(a => a.Genre);
             var album = await albumContext
                 .SingleOrDefaultAsync(m => m.AlbumID == id);
+            var ratingContext = _context.AlbumRatings
+                .Include(a => a.Album)
+                .Include(a => a.User);
+            var ratings = ratingContext.Where(a => a.AlbumID == (int)id);
+            if (ratings.ToList().Count != 0){
+                var rating = 0;
+                foreach (var r in ratings.ToList())
+                {
+                    rating += r.Rating;
+                }
+                ViewData["Rating"] = rating / ratings.ToList().Count + "/5";
+            }
+            else
+            {
+                ViewData["Rating"] = "Not Rated";
+            }
             if (album == null)
             {
                 return NotFound();
             }
 
             return View(album);
+        }
+
+        public async Task<IActionResult> Rate(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var userID = _userManager.GetUserId(User);
+            if (_context.AlbumRatings.SingleOrDefault(m => (m.UserID == userID) && (m.AlbumID == id)) == null)
+            {
+                var album = await _context.Albums.SingleOrDefaultAsync(m => m.AlbumID == id);
+                if (album == null)
+                {
+                    return NotFound();
+                }
+                ViewData["AlbumID"] = album.AlbumID;
+                return View();
+            }
+            return NotFound("You've already rated this album.");
+        }
+
+        [HttpPost]
+        public IActionResult Rate(int id, int rating)
+        {
+            var userID = _userManager.GetUserId(User);
+            if(_context.AlbumRatings.SingleOrDefault(m => (m.UserID == userID) && (m.AlbumID == id)) == null)
+            {
+                var Rating = new AlbumRating { UserID = userID, AlbumID = id, Rating = rating};
+                _context.Add(Rating);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            var album = _context.Albums.SingleOrDefault(m => m.AlbumID == id);
+            if (album == null)
+            {
+                return NotFound();
+            }
+            ViewData["Title"] = album.Title;
+            return View(rating);
         }
 
         // GET: Albums/Create
